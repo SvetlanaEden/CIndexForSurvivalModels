@@ -1,0 +1,563 @@
+\documentclass[]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage{anysize}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{mathtools}% Loads amsmath
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{lscape}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage[makeroom]{cancel}
+\usepackage{listings}
+\usepackage{dsfont} %%%  For indicator function
+
+% \newcommand\SLASH{\char`\\}
+% \newcommand{\csch}{\text{csch}}
+\marginsize{0.5in}{1in}{0.5in}{1in}
+
+% line numbers
+\usepackage[right]{lineno}  %\linenumbers
+
+
+
+% \usepackage[backend=biber,maxnames=10,citestyle=science]{biblatex}
+% \addbibresource{summaryOfRef.bib}
+
+%%%%%%%%%%%%%%%%%%%%% how to get refences:
+%%% run knitr(    "knit("paper1.rnw")"   )
+%%% compile 
+%%%      paper1.tex
+%%%                    file using TeXShop
+%%% run 
+%%%      bibtex paper1 
+%%%                   in the command prompt
+%%% compile again
+%%%      paper1.tex
+%%%                    file using TeXShop
+%%% TWICE!
+
+
+\bibliographystyle{unsrtnat}
+
+\linespread{1.5}
+
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Cor}{\mathrm{Cor}}
+
+\newcommand\SLASH{\char`\\}
+\newcommand{\csch}{\text{csch}}
+\renewcommand{\tablename}{\textbf{Web Table}}
+\renewcommand{\figurename}{\textbf{Web Figure}}
+
+\marginsize{0.5in}{1in}{0.5in}{1in}
+\setlength\parindent{0pt}
+
+% Title Page: Modify as needed
+\title{\textbf{\small{Semi-parametric and parametric estimation of C--index in the context of survival regression}}\\
+\emph{\small{Svetlana's pitch}}}
+
+\date{ \today}
+
+\hypersetup{hidelinks}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\maketitle
+
+\linenumbers
+
+\section{Brief Introduction}
+
+Harrell proposed a C-index (AUC) for survival models. His index was biased under censoring.\\
+
+\cite{pencina2004overall} proposed confidence intervals for a C-index that was also biased under censoring.\\
+
+\cite{uno2011c} suggested a consistent C-index estimator under independent censoring. The authors also proposed an asymptotic method of estimating its confidence intervals. Although their estimator is non-parametric, it it usually applied to semi- or nonparametric models. \\
+
+\cite{heagerty2005survival} derived a C-index estimator under proportional hazard model, however, according to the authors, their method can be adopted to any model (non-prop. hazards or a different survival model). They also introduced time dependent sensitivity ($sens(c, t) = Pr(W_i > c | T_i = t)$), specificity ($spec(c, t) = Pr(W_i \leq c | T_i > t)$) (which they call incidence sensitivity and dynamic specificity), and time-dependent AUC curve ($AUC(t) = Pr(W_j > W_k | T_j = t, T_k > t)$).
+%%%
+They also use the work of \cite{xu2000proportional} to avoid estimating the hazard function (??? I am clear on this). They use the bootstrap to estimate the variance.\\
+
+We propose a method of estimating, $sens(c, t)$, $spec(c, t)$, $AUC$, or $AUC(t)$ using conditional survival function obtained from the semi- or nonparametric survival model. The condfidence intervals can be obtained using M-estimation. The contribution of this approach is basically confidence intervals and the simplicity of use. This approach can also be used for nonparametric model, but then the CIs will have to be computed using the bootstrap. There is another minor advantage of this approach. A simple R-function can be used to obtain $sens(c, t)$, $spec(c, t)$, $AUC$, or $AUC(t)$ given any matrix of conditional suvival probabilities. 
+
+
+% \section{Not needed for now}
+%
+% Have to read: \cite{harrell1996multivariable}.\\
+%
+% \cite{pencina2004overall} defined the overall C index for sruvival data defined for $X$ (actual times to event) and $Y$ (predicted times to events). They showed that the C index is related to the modified Kendall's tau and derived confidence intervals for the C index. Qeustion: what did they do if the predicited survival time was greater than the censoring time? Answer: they used only usable pairs - check please\\
+%
+% \cite{gonen2005concordance}
+%
+% \cite{pencina2008evaluating}
+% Talk about incremental yield of a new biomarker: NRI and stuff.
+%
+% \cite{pencina2011extensions}
+% More on NRI
+%
+% \cite{uno2011c}
+% Consistent estimator of C-index. Free of censoring{?}
+% For you: read Brown et al [12] reference. They refer to Heagerty and Zheng [14] who derived C-ind under proportional hazard model (if not correctly specified the result may be biased). Read [16]: they say that these estimators depend on the censoring distribution. They say that Harrell's statistic [11] depends on the censoring distribution.\\
+% Their statistic is conditional on being in the restricted region. They also develop a test to compare two models.
+%
+% \cite{heagerty2005survival}
+% They introduce time dependent sensitivity ($sens(c, t) = Pr(W_i > c | T_i = t)$), specificity ($spec(c, t) = Pr(W_i \leq c | T_i > t)$) (which they call incidence sensitivity and dynamic specificity), and time-dependent AUC curve ($AUC(t) = Pr(W_j > W_k | T_j = t, T_k > t)$).
+% %%%
+% \textbf{They does not define the AUC correctly. Their definition works for continuous not discrete.} They kind of address this on page 99, but I do not understand their reasoning.
+% %%%
+% They use Kaplan-Meier to estimate  $Pr(T > t)$.
+% They propose these measures for regular and time-dependent Cox regression. They do confidence intervals using bootstrap (I AM STILL TRYING TO UNDERSTAND WHY THEY NEED IT) because they do not know how to estimate the bivariate survival surface (I CAN DO BETTER, I THINK).
+% [CHECK IF YOU CAN IMPROVE ON TIME-DEPENDENT COEFFICIENTS: THEY ARE USING SOME SMOOTHING TECHNIQUE, WHICH IS ALWAYS A PAIN...]
+% %%% Bottom line:
+% Bottom of page 98: this works for proportional hazard models and for discrete models.
+% %%% Your contribution:
+% They say that they decouple \emph{the generation of a predictive score from the evaluation of prognostic accuracy}.
+% You decouple prognostic accuracy from any model and base their computation ONLY on conditional survival model.
+% They DID NOT do variance estimation.... (see Discussion)
+%
+% \cite{rizopoulos2011dynamic} suggested incidence sens. and dynam. spec., AUC(T) for longitudinal models. READ MORE CAREFULLY: WHY DO THEY USE MONTE CARLO SIMULATIONS TO ESITMATE THESE?
+%
+% \cite{xu2000proportional} Showed that $S_{T|W}(t | w)$ can be computed without baseline hazard estimator. This means that the variance computation is much easier.
+%
+% Read Zheng and Heagarty [2004]
+% Read Fan [2002]. Read Schemper and Henderson [2000] Relation of C to Kendall's Tau.
+%
+% \cite{uno2013unified}
+%
+% Read Gambsch and Therneau 1994 (about relaxing proportional hazards assumptions)
+
+
+% \section{Next Steps}
+% \begin{enumerate}
+%   \item \textbf{20200615}: Check via simulations: I could not fall asleep the other day and had the following thought. Suppose time to outcome (exponentially distributed) depends only on one covariate; and we estimate this covariate's beta using exponetial distribution.
+%     Suppose we also have censoring, which has the same marginal distribution (same covariate, same beta)
+%     Suppose we also estimating survival function using exponential model
+%     As long as beta is the same sing as the real beta, censoring should not be a problem, and the C-index should be unbiased.
+%     Rationale of this thought is that the predicted values will be concordant with beta Z because we predict survival probability using exp model.
+%     This might not be true if we use non-parametric estimator of the c-index
+% \end{enumerate}
+
+
+\subsection{C-index}
+
+\subsubsection{Population parameter}
+
+Time to event and time to censoring are denoted as $T$ and $C$, where $T \perp C$. We only observe $X = min(T, C)$ and $\Delta = I(T\leq C)$.  The survival function of $T$, $S_T(t,\pmb{Z}, \pmb{\beta})$, is a function of random variables $\pmb{Z}$ and parameters $\pmb{\beta}$. Let $W = -\pmb{\beta}\pmb{Z}$, $H(w) = \Pr(W \leq w)$, $h(w) = H(dw)$, $S_{T|W}(t|W=w) = \Pr(T>t|W = w)$,  and $S(t, w) = \Pr(T > t, W>w)$. Note that $S_T(t,\pmb{Z}, \pmb{\beta}) = S_{T|W}(t|W=w)$. Here we assume that larger $W$ is associated with longer survival time $T$.
+
+Let $T_i$ a time to event for subject $i$, and $W_i$ be this subject's corresponding predicted survival probability. Then, according to \cite{pencina2004overall}, for two independent and identically distributed pairs $(T_1, W_1) \perp (T_2, W_2)$ continuous and discrete data, the $C_{ind}$ can be defined as
+%%%
+
+\begin{linenomath}
+  \begin{align}
+  \label{defineC}
+ C_{ind} = \frac{\Pr(W_1 > W_2,~ T_1 > T_2)}{\Pr(W_1 > W_2,~ T_1 > T_2) + \Pr(W_1 < W_2,~ T_1 > T_2)}.
+\end{align}
+\end{linenomath}
+
+For continuous data, $\Pr(W_1 > W_2,~ T_1 > T_2) + \Pr(W_1 < W_2,~ T_1 > T_2) = \Pr(T_1 > T_2)$, therefore $C_{ind}$ can be written as
+% We want to evaluate the magnitude of association between $T$ and $Y = S_T(T,\pmb{Z}, \pmb{\beta})$. One way of evaluating a magnitude of association is to compute the index of concordance,
+%%%
+\begin{align}
+  \label{defineCCont}
+ C_{ind} = \frac{\Pr(W_1 > W_2,~ T_1 > T_2)}{\Pr(T_1 > T_2)},
+\end{align}
+%%%
+which is a proportion of \emph{concordant pairs out of all comparable (concordant or discordant)} pairs.\\
+
+We propose a general method of estimating the $C_{ind}$ using the joint distribution of $(T, W)$:
+%%%
+\begin{linenomath}
+\begin{align}
+  \Pr&(T_1>T_2, W_1>W_2) = \int \int  \Pr\left\{ (T_1>T_2, W_1>W_2) \cap (T_{1}\wedge T_{2} = t,~W_{1}\wedge W_{2} = w)  \right\}   \notag\\
+  &= \int \int \Pr( T_1>t, W_1>w, T_2=t, W_2=w) =\int \int \Pr( T_1>t, W_1>w)\Pr( T_2=t, W_2=w)  \notag\\
+  &= \int \int S(t, w)S(dt,dw);  \notag\\
+  %%%
+  \Pr&(T_1>T_2, W_1<W_2) = \int \int \Pr\left\{ (T_1>T_2, W_1<W_2) \cap (T_{1}\wedge T_{2} = t,~W_{1}\wedge W_{2} = w) \right\}  \notag \\
+  & = \int \int \Pr( T_1>t, T_2=t, W_1=w, W_2>w)= \int \int \Pr( T_1>t, W_1=w) \Pr( T_2=t, W_2>w) \notag  \\
+  & = \int \int S(t, dw)S(dt,w). \notag
+\end{align}
+\end{linenomath}
+%%%
+From the above and definition (\ref{defineC}), we get
+\begin{linenomath}
+\begin{align}
+  \label{cIndexSurvivalPop}
+    C_{ind} = \frac{ \int \int S(t, w)S(dt,dw)}{\int \int \left\{S(t, w)S(dt,dw) +  S(t, dw)S(dt,w)\right\} }.
+\end{align}
+\end{linenomath}
+%%%
+For continuous $T$, keeping in mind (\ref{defineCCont}) and the fact that $\Pr(T_1>T_2) = \int S_{T|W}(t|W = w) S_{T|W}(dt|W= w)$, we get
+\begin{linenomath}
+\begin{align}
+  \label{cIndexSurvivalPopContinuous}
+    C_{ind} = \frac{ \int \int S(t, w)S(dt,dw)}{\int S_{T|W}(t|W=w)  S_{T|W}(dt|W=w)}.
+\end{align}
+\end{linenomath}
+
+Using the above approach, we can easily define cumulative/incident sensitivity, dynamic specificity, and time-dependent $C_{ind}$ defined by \cite{heagerty2005survival}. 
+\begin{linenomath}
+\begin{align}
+  \label{sensSpecAndMore}
+    \text{sensitivity}^{\mathds{C}} &= \Pr(W  > c| T  \leq t) = \frac{\Pr(W  > c, T  \leq t)}{P(t \leq t)} = \frac{ S_W(c) - S (t,c) }{ 1- S_T(t)}\notag\\
+    \text{sensitivity}^{\mathds{I}} &= \Pr(W  > c| T  = t) = \frac{ S (dt,c) }{ -S_T(dt)}\notag\\
+    \text{specificity}^{\mathds{D}} &= \Pr(W  \leq c| T  > t) =  \frac{ S_T(t) - S (t,c) }{ S_T(t)},\\
+    %%%
+  %\label{cIndexCondOnTContinuous}
+    C_{ind}(t) &= \frac{   \Pr(T_1 = t, t < T_2 , W_1 < W_2 )   }{  \Pr(T_1 = t, t < T_2 , W_1 < W_2 )   +  \Pr(T_1 = t, t < T_2, W_1 > W_2 )   } \notag\\
+    %%%
+        &= \frac{  \int_w \Pr(T_1 = t, t < T_2, W_1 = w,  w < W_2 )   }{  \int_w \Pr(T_1 = t, t < T_2, W_1 = w,  w < W_2 )  +    \int_w  \Pr(T_1 = t, t < T_2, W_1 = w, W_2 < w )   }\notag \\
+    %%%
+        &= \frac{  \int_w S(t, w) S(dt, dw)   }{  \int_w S(t, w) S(dt, dw)    +    \int_w  S(dt, w) S(t, dw)  }.
+    %%%
+\end{align}
+\end{linenomath}
+% The authors also defined a time-dependent $C_{ind}$, $C_{ind}(t) = AUC(t) = \Pr(W_2 > W_1 ~|~  T_2 >t, T_1 = t)$ for a continuous case. For a continuous and discrete case, it can be defined as
+% %%%
+% Note that $C_{ind}(t)$ can also be written as
+% %%%
+% \begin{align*}
+%     %%%
+%       C_{ind}(t)  &= \frac{  \int_w S(t, w) S(dt, dw)   }{  \int_w S(t, w) S(dt, dw)    +    \int_w  S(dt, dw) \{  S_T(t) - S(t, w^-) \}   },
+% \end{align*}
+% %%%
+% which in the continuous case can be simplified: $C_{ind}(t) = \frac{  \int_w S(t, w) S(dt, dw)   }{   \int_w  S(dt, dw) S_T(t)    } = \frac{  \int_w S(t, w) S(dt, dw)   }{  S(dt) S_T(t)    } = \int_w S_{W|T}(w|t) S_{W|T}(dw|t)  $.
+% %%%
+% Note that the only difference between (\ref{cIndexCondOnTContinuous}) and (\ref{cIndexSurvivalPop}) is that the integration in (\ref{cIndexCondOnTContinuous}) is over $W$ and in (\ref{cIndexSurvivalPop}) over both $T$ and $W$.
+
+
+\subsubsection{Estimation}
+
+Let $t_i$ and $\pmb{z}_i$ be realizations of $T_i$ and $\pmb{Z}_i$ respectively and $w_i = -\widehat{\pmb{\beta}}\pmb{z}_i$, where $i = 1,...,n$ and $\widehat{\pmb{\beta}}$ is obtained from a survival model fit.
+We estimate (\ref{cIndexSurvivalPop}) and (\ref{cIndexSurvivalPopContinuous}) by plugging in the corresponding survival probability estimators
+\begin{linenomath}
+\begin{align}
+  \label{cIndetSurvivalSample}
+    \widehat{C_{ind}} &= \frac{ \sum_i \sum_j \widehat{S}(t_i, w_j)\widehat{S}(dt_i,dw_j)}{\sum_i \sum_j \left\{\widehat{S}(t_i, w_j)\widehat{S}(dt_i,dw_j) +  \widehat{S}(t_i, dw_j)\widehat{S}(dt_i,w_j)\right\} },\\
+    \label{cIndetSurvivalSampleContinuous}
+    \widehat{C_{ind}} &= \frac{ \sum_i \sum_j \widehat{S}(t_i, w_j)\widehat{S}(dt_i,dw_j)}{\sum_i \widehat{S}_{T|W}(t_i|W=w_i) \widehat{S}_{T|W}(dt_i|W=w_i)},
+\end{align}
+\end{linenomath}
+where $\widehat{S}_{T|W}(t_i|W=w_i)$ is computed from the regression fit, and  $\widehat{S}(t_i, w_j) = \sum_{w_k > w_j} \widehat{S}_{T|W}(t_i | W=w_k) \widehat{H}(dw_k) $ (see the Appendix) with $\widehat{H}(dw)$ obtained using Kaplan-Meier estimator.\\
+
+
+We could use a consistent estimator of the survival surface, for example Dabrowska's estimator, but there is a problem. In order to use Dabrowska's or other survival surface estimators, we assume that pairs $(t_i,W_i)$ are independent of each other. In reality however, because $W_{i} = \widehat{S}_T(x_i,\pmb{z}_{i}, \widehat{\pmb{\beta}})$ and $\widehat{\pmb{\beta}} = \widehat{\pmb{\beta}}(x_1, x_2, ... , x_n, \delta_1, \delta_2,... , \delta_n, \pmb{z}_1,\pmb{z}_2,...,\pmb{z}_n)$, pair $(t_i, W_i)$ is not independent of pair $(t_j, W_j)$ for $i\neq j$. BUT, if we assume that $\widehat{\pmb{\beta}}$ is a vector of constants, we can treat pairs $(t_i, W_i)$ as i.i.d. This assumption is reasonable because we are interested in determining the discrimination ability of the model no matter how we obtain the coefficients.\\
+
+% From the simulations I've conducted so far, estimate (\ref{cIndexSurvivalSample}) is either as good as the existing methods (Harrell, Uno) or is biased toward the null, while the existing methods can be biased away from null. I think this is a good thing. Also, because $W_i$ is not censored, instead of Dabrowska's estimator, we can use the estimator of Stute, who suggested a survival surface estimator for the data with one uncensored variable. Although the variance of his estimator is larger than Dabrowska's for smaller sample sizes (from my preliminary simulations), his estimator is equipped with a large sample variance expression. Disclosure: I haven't tried it yet. Another good thing about Stute's estimator is that it does not seem to suffer from the problem of negative mass, which means that we can compute a restricted C--index without a problem.
+
+
+\subsubsection{Inference using M-estimation}
+
+We use \cite{stefanski2002calculus} to compute the variance. Estimating equations of \cite{stute1995central} (denoted as $V _j(w_j)$) are used for the Kaplan-Meier estimate, $d\widehat{H}$. Let'd define our parameters: $\beta_j$, $\theta_{1,j} = dH _j$, $\lambda_j = \lambda _j$,
+%%%
+$\theta_{2,j} = S_{T|W}(t|w_j) = S_{T|W}(\beta_j, \lambda_j, t|w_j)$,
+%%%
+$\theta_{3,j} = S (t,dw_j) = S_{T|W}(t|w_j)dH_j = \theta_{2,j} \theta_{1,j}$,
+%%%
+ $\theta_{4,0} = S_T(t) = \sum S_{T|W}(t|w_j)dH _j = \sum \theta_{3,j}$,
+ %%%
+ $\theta_{4,j} = S (t, w_j)= \widehat{S} (t_{\cdot}, dw_j) + \widehat{S} (t_{\cdot}, w_{j-1}) = \theta_{3,j} + \theta_{4,j-1}$,
+ %%%
+ $\theta_{5,i,j} = S_{T|W}(dt_i|w_j) = \theta_{2, i,j} - \theta_{2, i-1,j}$,
+ %%%
+ $\theta_{6,j} = S (dt, dw_j) =  S_{T|W}(dt|w_j)dH_j = \theta_{5,j} \theta_{1,j}$,
+ %%%
+ $\theta_{7,0} = \widehat{S}_{T}(dt) = \sum_{i=1}^n \widehat{S}_{T|W}(dt|w_i)d\widehat{H}(w_i) = \sum \theta_{6,j}$,
+ %%%
+ $\theta_{7,j} = S (dt, w_j) = \widehat{S} (dt, dw_i) + \widehat{S} (dt_{\cdot}, w_{i-1}) = \theta_{6,j} + \theta_{7,j-1}$.
+
+%%%%%%%%%%%%%%% first
+\begin{align*}
+  &\frac{\partial L_i}{\partial \beta_k} - \beta_k &   \widehat{\beta}_k = \beta\text{-coefficients of the Cox model}\\
+  %%%
+  &\frac{\partial L_i}{\partial \lambda _j} - \lambda_j &  \widehat{\lambda}_j = \text{hazard rates estimates of the Cox model}\\
+  %%%
+  &V _j - \theta_{1,j} &  \theta_{1,j} = d\widehat{H}(w_j) \text{ (steps of CDF of $w_j$)}\\
+  %%%
+  & S_{T|W}(\beta_k, \lambda_j, t_i|w_j) - \theta_{2,i,j}    &  \theta_{2,i,j} =  S_{T|W}(\beta_k, \lambda_j, t_i|w_j) \text{ (survival probability conditional on $w_j$)}  \\
+  %%%
+  &\theta_{2,i,j}\theta_{1,i,j} - \theta_{3,i,j}    &    \theta_{3,i,j}= S (t_i,dw_j) =  S_{T|W}(t_i|w_j) d\widehat{H}(w_j) \\
+  %%%
+  & \sum_j \theta_{3,i,j} - \theta_{4,i,0}    &  \theta_{4,i,0} = S_T(t_i)   \\
+  %%%
+  &  (\theta_{3,i,j} + \theta_{4,i,j-1}) -  \theta_{4,i,j}  &    \theta_{4,i,j} = S (t_i, w_j) \\
+  %%%
+  &   S_{T|W}(\beta_j, \lambda_j, dt_i|w_j) -  \theta_{5,i,j} &   \theta_{5,i,j}  =  S_{T|W}(dt_i|w_j) \\
+  %%%
+  &   \theta_{5,i,j}\theta_{1,j} -  \theta_{6,i,j} &    \theta_{6,i,j} = S (dt_i, dw_j) \\
+  %%%
+  &   \sum_j \theta_{6,i,j} - \theta_{7,i,0}  &   \theta_{7,i,0} = S_T(dt_i)  \\
+  %%%
+  &   (\theta_{6,i,j} + \theta_{7,i,j-1}) - \theta_{7,i,j}  &    \theta_{7,i,j} = S (dt_i, w_j)  \\
+  %%%
+  & \frac{ \sum_i \sum_j  \theta_{4,i,j}  \theta_{6,i,j}}{ \sum_i \sum_j  \theta_{4,i,j}  \theta_{6,i,j} - \sum_i \sum_j  \theta_{3,i,j}  \theta_{7,i,j}} - C_{ind}  &   C_{ind}  = \frac{ \sum_i \sum_j  S (t_i, w_j)   S (dt_i, dw_j)  }{ \sum_i \sum_j  \left\{  S (t_i, w_j)S (dt_i, dw_j)  -  S (t_i, dw_j) S (dt_i, w_j)  \right\} } \\
+\end{align*}
+
+%%%%%%%%%%%%%%% second
+\begin{align*}
+  &\frac{\partial L_i}{\partial \beta_k} - \beta_k &   \widehat{\beta}_k = \beta\text{-coefficients of the Cox model}\\
+  %%%
+  &\frac{\partial L_i}{\partial \lambda _j} - \lambda_j &  \widehat{\lambda}_j = \text{hazard rates estimates of the Cox model}\\
+  %%%
+  &V _j - \theta_{1,j} &  \theta_{1,j} = d\widehat{H}(w_j) \text{ (steps of CDF of $w_j$)}\\
+  %%%
+  & S_{T|W}(\beta_k, \lambda_j, t_i|w_j) - \theta_{2,i,j}    &  \theta_{2,i,j} =  S_{T|W}(\beta_k, \lambda_j, t_i|w_j) \text{ (survival probability conditional on $w_j$)}  \\
+  %%%
+  & \sum_j \theta_{2,i,j}\theta_{1,i,j}  - \theta_{4,i,0}    &  \theta_{4,i,0} = S_T(t_i)   \\
+  %%%
+  &  (\theta_{2,i,j}\theta_{1,i,j}  + \theta_{4,i,j-1}) -  \theta_{4,i,j}  &    \theta_{4,i,j} = S (t_i, w_j) \\
+  %%%
+  &   \sum_j ( \theta_{2,i,j} - \theta_{2,i-1,j} )\theta_{1,j} - \theta_{7,i,0}  &   \theta_{7,i,0} = S_T(dt_i)  \\
+  %%%
+  &   (( \theta_{2,i,j} - \theta_{2,i-1,j} )\theta_{1,j} + \theta_{7,i,j-1}) - \theta_{7,i,j}  &    \theta_{7,i,j} = S (dt_i, w_j)  \\
+  %%%
+  & \frac{ \sum_i \sum_j  \theta_{4,i,j}  ( \theta_{2,i,j} - \theta_{2,i-1,j} )\theta_{1,j}}{ \sum_i \sum_j  \theta_{4,i,j}  ( \theta_{2,i,j} - \theta_{2,i-1,j} )\theta_{1,j} - \sum_i \sum_j  \theta_{2,i,j}\theta_{1,i,j}  \theta_{7,i,j}} - C_{ind}  &   C_{ind}  = \frac{ \sum_i \sum_j  S (t_i, w_j)   S (dt_i, dw_j)  }{ \sum_i \sum_j  \left\{  S (t_i, w_j)S (dt_i, dw_j)  -  S (t_i, dw_j) S (dt_i, w_j)  \right\} } \\
+\end{align*}
+
+
+
+
+\section{Appendix}
+
+\subsection{Derivation and estimation of $S (t, w)$}
+
+\begin{align*}
+  S (t, dw) &= \Pr(T>t, W=y) = \Pr(T>t | W=y) \Pr(W = y)= S_{T|W}(t | W=y) H(dy)\\
+  S (t, w) &= \int_w^{\infty}S (t, dw)= \int_w^{\infty}S_{T|W}(t | W=y) H(dy)\\
+  S (dt, w) &= \int_w^{\infty}S_{T|W}(dt | W=y) H(dy)\\
+  S (dt, dw) &= -S_{T|W}(dt | W=y) H(dy)
+\end{align*}
+
+In the above $H(y)$ is estimated using Kaplan-Meier estimator, and $\widehat{S}_{T|W}(t_i | W=w_i)$ by fitting a survival regression. Here, we assume that $w_i >= w_{i-1}$ for all $i = 1,...,n$. Because $\widehat{S} (t_i, dw_i) = \widehat{S} (t_i, w_i) - \widehat{S} (t_i, w_{i-1})$, we have
+\begin{align*}
+  % \label{jointSurvProbEstimator}
+%%%
+  \widehat{S} (t_{\cdot}, dw_i) &= -\widehat{S}_{T|W}(t_{\cdot} | W=w_i) \widehat{H}(dw_i) \text{~~~~~~~for  }i>1,\\
+  %%%
+  &\text{~~~~and } \widehat{S} (t_{\cdot}, dw_1)  = 
+   -\widehat{S}_{T|W}(t_{\cdot} | W=w_1) \widehat{H}(w_1),\\
+   %%%
+  \widehat{S} (t_{\cdot}, ~w_i) &= \widehat{S} (t_{\cdot}, dw_i) + \widehat{S} (t_{\cdot}, w_{i-1}),\\
+  %%%
+   &\text{where } \widehat{S} (t_{\cdot}, w_0) = \widehat{S}_{T}(t_{\cdot}) = \sum_{i=1}^n \widehat{S}_{T|W}(t_{\cdot}|w_i)d\widehat{H}(w_i),\\
+   %%%
+   \widehat{S} (dt_{\cdot}, dw_i) &= -\widehat{S}_{T|W}(dt_{\cdot} | W=w_i) \widehat{H}(dw_i),\\
+   %%%
+   \widehat{S} (dt_{\cdot}, w_i) &=  \widehat{S} (dt_{\cdot}, dw_i) + \widehat{S} (dt_{\cdot}, w_{i-1}),\\
+  %%%
+   &\text{where } \widehat{S} (dt_{\cdot}, w_0) = \widehat{S}_{T}(dt_{\cdot}) = \sum_{i=1}^n \widehat{S}_{T|W}(dt_{\cdot}|w_i)d\widehat{H}(w_i).
+\end{align*}
+
+To use M-estimation (the delta-method part), we need to express the above in terms estimated parameters. Let's denote $\theta_{j} = \widehat{H}(w_j)$ and $\gamma_{i, j} = \widehat{S}_{T|W}(t_i | W=w_i)$, where $j \in \{ 1, ..., n\}$ and $i \in \{ 0,1, ..., n\}$ and $\gamma_{0, j} = \widehat{S}_{T|W}(0 | W=w_i) = \Pr(T>0 | W = w_i) = \frac{  \Pr(T>0 , W = w_i)   }{  \Pr(W = w_i)  } =  \frac{  S(0 , d w_i)   }{  S_W(d w_i)  }  = S_W(dw_i)/S_W(dw_i) = 1 $.
+
+\begin{align*}
+  % \label{jointSurvProbEstimator}
+%%%
+  \widehat{S} (t_i, dw_j) &= -\gamma_{i,j} \theta_j  \\
+  %%%
+  \widehat{S} (t_i, w_0) &= \widehat{S}_{T}(t_i) = \sum_{j=1}^n \gamma_{i,j} \theta_j\\
+  %%%
+  \widehat{S} (t_i, ~w_j) &= -\gamma_{i,j} \theta_j  + \widehat{S} (t_i, w_{j-1}) =  -\gamma_{i,j}\theta_j -\gamma_{i,j-1}\theta_{j-1})  + \widehat{S} (t_i, w_{j-2}) \\
+  &= -\gamma_{i,j}\theta_j -\gamma_{i,j-1}\theta_{j-1} - ... - \gamma_{i,1}\theta_{1}  + \widehat{S} (t_i, w_0) = -\sum_{k=1}^j \gamma_{i,k} \theta_k  + \sum_{l=1}^n \gamma_{i,l} \theta_l\\
+  & = \sum_{l=j+1}^n \gamma_{i,l} \theta_l\\
+  %%%
+   \widehat{S} (dt_i, dw_j) &= \left\{    \widehat{S} (t_i, dw_j) - \widehat{S} (t_{i-1}, dw_j)  \right\} \widehat{H}(dw_j)\\
+   &= \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j\\
+   %%%
+   %\widehat{S} (dt_i, w_0) & = \widehat{S}_{T}(dt_i) = -\sum_{j=1}^n\left( \gamma_{i,j} - \gamma_{i-1,j}   \right) \theta_j\\
+   %%%
+   \widehat{S} (dt_i, w_j) &= \widehat{S} (t_i, w_j) - \widehat{S} (t_{i-1}, w_j)=
+    -\sum_{k=1}^j( \gamma_{i,k} - \gamma_{i-1,k} )\theta_k  + \sum_{l=1}^n (\gamma_{i,l} - \gamma_{i-1,l}) \theta_l\\
+   & = \sum_{l=j+1}^n \left(  \gamma_{i,l} - \gamma_{i-1,l} \right) \theta_l \\
+   %%%
+   % \widehat{S} (dt_i, w_j) &=  \widehat{S} (dt_i, dw_j) + \widehat{S} (dt_i, w_{j-1})=  \{\widehat{S} (dt_i, dw_j) + \widehat{S} (dt_i, dw_{j-1}) \} + \widehat{S} (dt_i, w_{j-2})\\
+   % & = \sum_{k = 1}^j \widehat{S} (dt_i, dw_k) + \widehat{S} (dt_i, w_0)\\
+   % & = \sum_{k = 1}^j \left(  -  \gamma_{i,k} + \gamma_{i-1,k}   \right) \theta_k   + \sum_{l=1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l\\
+   %&= \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l\\
+  %%%
+  \widehat{S} (t_i, ~w_j) \widehat{S} (dt_i, dw_j) &=   \left[  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right]  \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j  \\
+  %%%
+  \widehat{S} (t_i, dw_j) \widehat{S} (dt_i, w_j) &=  \left[   \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right]  (\gamma_{i,j} \theta_j) \\
+  %%%
+  % \widehat{S} (t_i, ~w_j) \widehat{S} (dt_i, dw_j) &+ \widehat{S} (t_i, dw_j) \widehat{S} (dt_i, w_j) =  \left[  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right]  \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j  +  \left[   \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right]  (\gamma_{i,j} \theta_j) \\
+  % & = \left[  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right]  \gamma_{i-1,j} \theta_j   - \left[  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right] \gamma_{i,j} \theta_j  +  \left[   \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right] \gamma_{i,j} \theta_j -
+  % \left[   \sum_{l=j+1}^n \gamma_{i-1,l} \theta_l \right] \gamma_{i,j} \theta_j \\
+  % &= \left[  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right]  \gamma_{i-1,j} \theta_j -
+  % \left[   \sum_{l=j+1}^n \gamma_{i-1,l} \theta_l \right] \gamma_{i,j} \theta_j
+\end{align*}
+
+For continuous case:
+
+\begin{align*}
+  C_{ind} &= \frac{ \sum_i \sum_j \widehat{S} (t_i, ~w_j) \widehat{S} (dt_i, dw_j)     }{    \sum_i \sum_j \widehat{S} (t_i, ~w_j) \widehat{S} (dt_i, dw_j) + \widehat{S} (t_i, dw_j) \widehat{S} (dt_i, w_j)}\\
+  & = \frac{ (1/n^2)   \sum_i \sum_j   \left(  \sum_{l=j+1}^n \gamma_{i,l}   \right)  \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right)       }{    (1/n^2) \sum_i \sum_j   \left\{  \left(  \sum_{l=j+1}^n \gamma_{i,l}  \right)  \gamma_{i-1,j}  - 
+  \left(   \sum_{l=j+1}^n \gamma_{i-1,l}  \right) \gamma_{i,j} \right\}   }
+  %%%
+\end{align*}
+
+To estimate the variance, we use M-estimation approach [REFXXX]. This approach requires computing the partial derivatives of the parameters of interest according to the parameters of the survival model, which we denote as $\beta$. Note that $\partial \gamma_{i,j}/ \partial \beta = \partial S(\beta, x_i|w_j)/ \partial \beta$, $\partial \theta_j/ \partial \theta_k = \mathds{1}_{(k = j)}$, and $\partial \theta_j/ \partial \beta = 0$ .
+
+\begin{align*}
+  \frac{  \partial  \widehat{S} (t_i, ~w_j) \widehat{S} (dt_i, dw_j)   }{  \partial \beta } &=    \left(   \frac{  \partial }{ \partial \beta  } \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right)    \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j       +         \left(  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right)    \frac{ \partial }{   \partial \beta }   \left\{    \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j   \right\} \\
+  %%%
+  &=    \left(    \sum_{l=j+1}^n    \frac{  \partial \gamma_{i,l}}{ \partial \beta  } \theta_l \right)    \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j       +         \left(  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right)       \frac{ \partial    \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right)}{   \partial \beta }  \theta_j \\
+  %%%%%%
+   \frac{  \widehat{S} (t_i, dw_j) \widehat{S} (dt_i, w_j)    }{  \partial \beta } &=  \left( \frac{  \partial }{ \partial \beta  }  \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right)  (\gamma_{i,j} \theta_j)      +      \left(   \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right) \frac{  \partial }{ \partial \beta  } (\gamma_{i,j} \theta_j)\\
+   %%%
+   &=  \left(   \sum_{l=j+1}^n  \frac{  \partial   \left( \gamma_{i,l} - \gamma_{i-1,l}   \right) }{ \partial \beta  }    \theta_l \right)  (\gamma_{i,j} \theta_j)      +      \left(   \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right) \frac{  \partial   \gamma_{i,j} }{ \partial \beta  } \theta_j\\
+   %%%%%%
+  \frac{  \partial  \widehat{S} (t_i, ~w_j) \widehat{S} (dt_i, dw_j)   }{  \partial \theta_k } &=  \left(   \frac{  \partial }{ \partial \theta_k   } \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right)    \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j       +         \left(  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right)    \frac{ \partial }{   \partial \theta_k  }   \left\{    \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j   \right\} \\
+  %%%
+  &=     \left(    \gamma_{i-1,j} - \gamma_{i,j}   \right) \theta_j  \gamma_{i,k}    \mathds{1}_{(k>j)}     +         \left(  \sum_{l=j+1}^n \gamma_{i,l} \theta_l \right)       \left(    \gamma_{i-1,k} - \gamma_{i,k}   \right) \mathds{1}_{(k=j)}    \\
+  %%%%%%
+   \frac{  \widehat{S} (t_i, dw_j) \widehat{S} (dt_i, w_j)    }{  \partial \theta_k } &=  \left( \frac{  \partial }{ \partial \theta_k   }  \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right)  (\gamma_{i,j} \theta_j)      +      \left(   \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right) \frac{  \partial }{ \partial \theta_k  } (\gamma_{i,j} \theta_j)\\
+  %%%
+    &=   ( \gamma_{i,k} - \gamma_{i-1,k}  ) \gamma_{i,j} \theta_j  \mathds{1}_{(k>j)}       +      \left(   \sum_{l=j+1}^n\left( \gamma_{i,l} - \gamma_{i-1,l}   \right) \theta_l \right)   \gamma_{i,k}  \mathds{1}_{(k=j)}
+\end{align*}
+
+
+
+%Let's denote its survival function as $S(t|\pmb{Z}, \pmb{\beta})$ and the survival function of $Y$ as $S_Y(y|Z)$. For brevity, we omit $|Z$ in the following derivations. In order to derive the probability of concordance and discordance in terms of survival functions, we remember the following property. If $A_i$ for $i=1...\infty$ are events that are independent of each other, then $\Pr(B) = \sum_i^{\infty} \Pr(B,A_i)$. We choose $A$ to be such an event that $T_{1}\wedge T_{2} = t,~W_{1}\wedge W_{2} = y$, where $T_{1}\wedge T_{2} = min(T_{1}, T_{2})$.
+
+
+% The probability of concordance can be written as (we double it because of symmetry)
+% %%%
+% \begin{align}
+%    2P (T_1 > T_2, W_1 > W_2) =& 2P (T_1 > T_2, W_1 > W_2 ~|~ T_2 = x, W_2 = y) P(T_2 = x, W_2 = y) \\
+%    =& 2P (T_1 > x, W_1 > y) P(T_2 = x, W_2 = y) \\
+%    =& \int \int 2S(t, y)S(dx,dy)
+% \end{align}
+% %%%
+% Also:
+% %%%
+% \begin{align}
+%    P (T_1 > T_2, W_1 < W_2) =& P (W_1 < W_2) - P (T_1 \leq T_2, W_1 < W_2) \\
+%     =& \left\{P (W_1 < W_2 | W_2 = y) - P (T_1 \leq T_2, W_1 < W_2 | T_2 = x, W_2 = y) \right\} P(T_2 = x, W_2 = y)\\
+%     =& \left\{P (W_1 < y) - P (T_1 \leq x, W_1 < y) \right\} P(T_2 = x, W_2 = y) \\
+%    =& \int \int \left[ \cancel{1} - \cancel{S_Y(y^-)} - \left\{\cancel{1} - S_X(x) - \cancel{S_Y(y^-)} + S(t, y^-)\right\}  \right] S(dx,dy)\\
+%    =& \int \int \left\{S_X(x) - S(t, y^-)\right\} S(dx,dy)
+% \end{align}
+% %%%
+% Because of symmetry:
+% %%%
+% \begin{align}
+%    P (T_1 < T_2, W_1 > W_2) =&
+%    \int \int \left\{S_Y(y) - S(t^-, y)\right\} S(dx,dy)
+% \end{align}
+% Then the probability of discordance is
+% \begin{align}
+%     P (T_1 > T_2, W_1 < W_2) + P (T_1 < T_2, W_1 > W_2) =&
+%    \int \int \left\{S_X(x) - S(t, y^-) + S_Y(y) - S(t^-, y)\right\} S(dx,dy)
+% \end{align}
+% Then the probability of a comparable pair is
+% \begin{align}
+%     2P (T_1 > T_2, W_1 > W_2)  + &P (T_1 > T_2, W_1 < W_2) + P (T_1 < T_2, W_1 > W_2)\\
+%      =& \int \int \left\{2S(t, y) + S_X(x) - S(t, y^-) + S_Y(y) - S(t^-, y)\right\} S(dx,dy)\\
+%      =& \int \int \left\{S(dx, y) + S(t, dy) + S_X(x) + S_Y(y)\right\} S(dx,dy)
+% \end{align}
+%
+% The probability of discordance can also be found in the following way. First we need to derive the distribution of $min(T_1, T_2)$ and $min(W_1, W_2)$:
+%
+% {\scriptsize{
+% \begin{align}
+% P\{ &T_{1}\wedge T_{2} = x,~W_{1}\wedge W_{2} = y \} &=\notag\\
+% =&P\{ T_{1} > x, T_{2} = x, W_{1} > y, W_{2} = y \}
+% + P\{ T_{1} > x, T_{2} = x, W_{1}= y, W_{2} = y \}
+%   + P\{ T_{1} > x, T_{2} = x, W_{1}= y, W_{2} > y \} + \notag\\
+% &+P\{ T_{1} = x, T_{2} = x, W_{1} > y, W_{2} = y \}
+% + P\{ T_{1} = x, T_{2} = x, W_{1}= y, W_{2} = y \}
+%   + P\{ T_{1} = x, T_{2} = x, W_{1}= y, W_{2} > y \} + \notag\\
+% &+P\{ T_{1} = x, T_{2} > x, W_{1} > y, W_{2} = y \}
+% + P\{ T_{1} = x, T_{2} > x, W_{1}= y, W_{2} = y \}
+%   + P\{ T_{1} = x, T_{2} > x, W_{1}= y, W_{2} > y \}\notag\\
+%   =& S(t,y)S(dx, dy) +  S(t,dy)S(dx, dy) + S(t,dy)S(dx, y) + \notag\\
+%   &~~~~~~+ S(dx,y)S(dx, dy) +  S(dx,dy)S(dx, dy) + S(dx,dy)S(dx, y) + \notag\\
+%   &~~~~~~+ S(dx,y)S(t, dy) +  S(dx,dy)S(t, dy) + S(dx,dy)S(t, y) = \notag\\
+%   &= 2S(t,y)S(dx, dy) +  2S(t,dy)S(dx, dy) + 2S(t,dy)S(dx, y) + 2S(dx,y)S(dx, dy) +  S^2(dx,dy) = \notag\\
+%   &= 2S(dx, dy)\left\{S(t,y) +  S(t,dy) + S(dx,y) +  S(dx,dy)\right\}  + 2S(t,dy)S(dx, y)= \notag\\
+%   &= 2S(dx, dy)\left\{\cancel{S(t,y)} +  S(t,y^-) - \cancel{S(t,y)} + S(t^-,y) - S(t,y) +  \frac{1}{2}S(t^-,y^-) - \frac{1}{2}S(t,y^-) - \frac{1}{2}S(t^-,y) + \frac{1}{2}S(t,y)\right\}\notag\\
+%   &~~~~~~~~~~~~~~~~~~~~~~~~  + 2S(t,dy)S(dx, y)= \notag\\
+%   &= 2S(dx, dy)\left\{\frac{1}{2}S(t^-,y^-)  + \frac{1}{2}S(t,y^-)  + \frac{1}{2}S(t^-,y) - \frac{1}{2}S(t,y)\right\} + 2S(t,dy)S(dx, y) =\notag\\
+%   &= 2S(dx, dy)\left\{ S(t^-,y^-) -\frac{1}{2}S(dx,dy)\right\} + 2S(t,dy)S(dx, y) =\notag\\
+%   &= 2S(dx, dy) S(t^-,y^-) -S^2(dx,dy) + 2S(t,dy)S(dx, y)\\
+% \end{align}
+% }}
+% %%%
+% It can be shown that the above is equivalent to the following expressions:
+% %%%
+% \begin{align}
+% P\{ &T_{1}\wedge T_{2} = x,~W_{1}\wedge W_{2} = y \}  =  \\
+%     &= 2S(dx, dy)S(t^-,y^-) + 2S(t,dy)S(dx, y) -S^2(dx,dy)= \\
+%     &= 2S(dx, dy)S(t,y)+ 2S(t^-,dy)S(dx, y^-)  -S^2(dx,dy)=\\
+%     &= 2S(dx, dy)S(t^-,y^-) + 2[S(t^-,dy)-S(dx,dy)][S(dx, y^-)-S(dx,dy)]  -S^2(dx,dy)=\\
+%     &= 2S(dx, dy)S(t^-,y^-) + 2S(t^-,dy)S(dx, y^-) + S^2(dx,dy) - 2S(dx,dy)[S(t^-,dy)+S(dx, y^-)]\\
+% \end{align}
+% %%%
+
+\section{Discussion}
+
+
+
+
+\bibliography{summaryOfRef}
+
+
+
+\end{document}          
